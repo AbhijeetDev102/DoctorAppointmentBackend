@@ -7,16 +7,16 @@ require("dotenv").config();
 
 exports.Signup = async (req, res)=>{
     try {
-        const {FirstName,LastName,Email,PhoneNumber,Password, ConfirmPassword, Role}= req.body
+        const {firstName,lastName,email,phoneNumber,password, confirmPassword, role}= req.body
 
-        if(Password!=ConfirmPassword){
+        if(password!=confirmPassword){
             return res.json({
                 success:false,
                 message:"Password doesn't match"
             })
         }
 
-        const UserExist = await userdata.findOne({ where:{Email} })
+        const UserExist = await userdata.findOne({ where:{email} })
 
         if(UserExist){
             return res.json({
@@ -25,16 +25,16 @@ exports.Signup = async (req, res)=>{
             })
         }
         
-        const hasedpass = await bcrypt.hash(Password, 10)
+        const hasedpass = await bcrypt.hash(password, 10)
 
 
             await userdata.create({
-            FirstName,
-            LastName,
-            Email,
-            PhoneNumber,
-            Password :hasedpass,
-            Role
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            password :hasedpass,
+            role
         })
 
         
@@ -56,8 +56,8 @@ exports.Signup = async (req, res)=>{
 
 exports.Login = async(req, res)=>{
     try {
-        const {Email, Password}= req.body;
-        const userExist = await userdata.findOne({where:{Email}})
+        const {email, password}= req.body;
+        const userExist = await userdata.findOne({where:{email}})
         if(!userExist){
             return res.json({
                 success:false,
@@ -65,7 +65,7 @@ exports.Login = async(req, res)=>{
             })
         }
 
-        const pass = bcrypt.compare(Password, userExist.Password)
+        const pass = bcrypt.compare(password, userExist.password)
         if(!pass){
             return res.json({
                 success:false,
@@ -74,10 +74,10 @@ exports.Login = async(req, res)=>{
         }
 
         const payload = {
-            FirstName:userExist.FirstName,
-            LastName:userExist.LastName,
-            Email:userExist.Email,
-            Role:userExist.Role
+            firstName:userExist.firstName,
+            lastName:userExist.lastName,
+            email:userExist.email,
+            role:userExist.role
         }
         const token = jwt.sign(payload, process.env.JWT_SECRETE )
 
@@ -85,9 +85,9 @@ exports.Login = async(req, res)=>{
             success:true,
             token:token,
             userData:{
-                FirstName:userExist.FirstName,
-                LastName:userExist.LastName,
-                Email:userExist.Email,
+                firstName:userExist.firstName,
+                lastName:userExist.lastName,
+                email:userExist.email,
             },
             message:"User loggedin successfully"
         })

@@ -2,29 +2,29 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConnect'); 
 
 const Signup = sequelize.define("Signup",{
-    FirstName:{
+    firstName:{
         type:DataTypes.STRING,
         required:true
     },
-    LastName:{
+    lastName:{
         type:DataTypes.STRING,
         required:true
     },
-    Email:{
+    email:{
         type:DataTypes.STRING,
         required:true
     },
-    PhoneNumber:{
+    phoneNumber:{
         type:DataTypes.INTEGER,
         required:true
     },
-    Password:{
+    password:{
         type:DataTypes.STRING,
         required:true
     },
     role:{
         type:DataTypes.STRING,
-        enum:["Admin", "Patients"]
+        enum:["Admin", "Patient"]
     }
 })
 
